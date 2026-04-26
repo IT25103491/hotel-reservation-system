@@ -37,7 +37,6 @@ public abstract class Room {
         return "AVAILABLE".equalsIgnoreCase(this.status);
     }
 
-    // Used by the form to know which subclass we're dealing with
     @Transient
     public String getRoomType() {
         return this.getClass().getSimpleName();

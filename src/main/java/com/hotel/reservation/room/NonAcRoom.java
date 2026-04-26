@@ -4,13 +4,14 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
 @Entity
-@DiscriminatorValue("STANDARD")
-public class StandardRoom extends Room {
+@DiscriminatorValue("NON_AC")
+public class NonAcRoom extends Room {
 
-    public StandardRoom() {}
+    public NonAcRoom() {}
 
     @Override
     public double calculatePrice(int nights) {
+        // Straight base rate — no premium
         return getCategory().getBasePrice() * nights;
     }
 }

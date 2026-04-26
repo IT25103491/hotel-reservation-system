@@ -33,11 +33,13 @@ public class RoomService {
     // Factory method — creates the right subclass based on type string
     public Room createRoomOfType(String type, String roomNumber, int floor,
                                  String status, RoomCategory category) {
+        validateTypeMatchesCategory(type, category);  // <-- ADD THIS LINE
+
         Room room;
         switch (type.toUpperCase()) {
-            case "STANDARD" -> room = new StandardRoom();
-            case "DELUXE"   -> room = new DeluxeRoom();
-            case "SUITE"    -> room = new SuiteRoom();
+            case "NON_AC" -> room = new NonAcRoom();
+            case "AC"     -> room = new AcRoom();
+            case "FAMILY" -> room = new FamilyRoom();
             default -> throw new IllegalArgumentException("Unknown room type: " + type);
         }
         room.setRoomNumber(roomNumber);
@@ -45,5 +47,26 @@ public class RoomService {
         room.setStatus(status);
         room.setCategory(category);
         return room;
+    }
+
+    private void validateTypeMatchesCategory(String roomType, RoomCategory category) {
+        String categoryName = category.getName().toLowerCase();
+        String type = roomType.toUpperCase();
+
+        boolean isAcCategory = categoryName.contains("ac") && !categoryName.contains("non");
+        boolean isNonAcCategory = categoryName.contains("non-ac") || categoryName.contains("non ac");
+        boolean isFamilyCategory = categoryName.contains("family");
+
+        boolean mismatch = false;
+        if (type.equals("AC") && !isAcCategory) mismatch = true;
+        if (type.equals("NON_AC") && !isNonAcCategory) mismatch = true;
+        if (type.equals("FAMILY") && !isFamilyCategory) mismatch = true;
+
+        if (mismatch) {
+            throw new IllegalArgumentException(
+                    "Room type '" + type + "' does not match category '" + category.getName() + "'. " +
+                            "Please select a matching pair."
+            );
+        }
     }
 }
