@@ -70,6 +70,10 @@
             <h3>Reservations</h3>
             <p>View bookings and update status</p>
         </a>
+        <a th:href="@{/admin/payments}" class="menu-card">
+            <h3>Payments</h3>
+            <p>View all payment transactions</p>
+        </a>
         <a th:href="@{/admin/staff}" class="menu-card admin-only" th:if="${staff.role == 'ADMIN'}">
             <h3>Staff Members</h3>
             <p>Add or remove staff (Admin only)</p>

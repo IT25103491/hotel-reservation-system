@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.hotel.reservation.reservation.ReservationService;
 import com.hotel.reservation.reservation.Reservation;
+import com.hotel.reservation.payment.PaymentService;
 
 import java.util.Optional;
 
@@ -17,11 +18,16 @@ public class AdminController {
     private final StaffService staffService;
     private final CustomerService customerService;
     private final ReservationService reservationService;
+    private final PaymentService paymentService;
 
-    public AdminController(StaffService staffService, CustomerService customerService,ReservationService reservationService) {
+    public AdminController(StaffService staffService,
+                           CustomerService customerService,
+                           ReservationService reservationService,
+                           PaymentService paymentService) {
         this.staffService = staffService;
         this.customerService = customerService;
         this.reservationService = reservationService;
+        this.paymentService = paymentService;
     }
 
     // ===== ADMIN LOGIN =====
@@ -140,6 +146,13 @@ public class AdminController {
             redirectAttrs.addFlashAttribute("errorMessage", e.getMessage());
         }
         return "redirect:/admin/reservations";
+    }
+
+    @GetMapping("/payments")
+    public String paymentList(HttpSession session, Model model) {
+        if (session.getAttribute("loggedInStaff") == null) return "redirect:/admin/login";
+        model.addAttribute("payments", paymentService.getAll());
+        return "admin/payment-list";
     }
 
     // ===== HELPER =====

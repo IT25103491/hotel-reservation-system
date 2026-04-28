@@ -100,13 +100,20 @@
                     Rs. <span th:text="${b.totalAmount}">0</span>
                     <small> total</small>
                 </div>
-                <form th:if="${b.status == 'PENDING' or b.status == 'CONFIRMED'}"
-                      th:action="@{/booking/cancel/{id}(id=${b.id})}"
-                      method="post"
-                      style="margin: 0;"
-                      onsubmit="return confirm('Are you sure you want to cancel this booking?');">
-                    <button type="submit" class="btn-cancel-booking">Cancel Booking</button>
-                </form>
+                <div style="display: flex; gap: 0.5rem;">
+                    <a th:if="${b.status == 'PENDING'}"
+                       th:href="@{/payment/checkout/{id}(id=${b.id})}"
+                       style="background: linear-gradient(135deg, #10b981 0%, #047857 100%); color: white; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 500; font-size: 0.85rem; text-decoration: none;">
+                        Pay Now
+                    </a>
+                    <form th:if="${b.status == 'PENDING' or b.status == 'CONFIRMED'}"
+                          th:action="@{/booking/cancel/{id}(id=${b.id})}"
+                          method="post"
+                          style="margin: 0;"
+                          onsubmit="return confirm('Are you sure you want to cancel this booking?');">
+                        <button type="submit" class="btn-cancel-booking">Cancel</button>
+                    </form>
+                </div>
                 <span th:if="${b.status == 'CHECKED_IN' or b.status == 'COMPLETED'}" class="text-muted small">Cannot cancel</span>
                 <span th:if="${b.status == 'CANCELLED'}" class="text-muted small">Cancelled</span>
             </div>
