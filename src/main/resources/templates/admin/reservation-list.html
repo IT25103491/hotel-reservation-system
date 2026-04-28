@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Reservations</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #f1f5f9; min-height: 100vh; }
+        .topbar { background: linear-gradient(135deg, #1e293b 0%, #475569 100%); color: white; padding: 1.5rem 0; }
+        .topbar h1 { font-weight: 700; font-size: 1.5rem; margin: 0; }
+        .topbar a { color: rgba(255,255,255,0.85); text-decoration: none; font-size: 0.875rem; }
+        .content-card { background: white; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); padding: 1.5rem; margin-top: 2rem; }
+        .table thead th { background: #f8fafc; border: none; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; color: #64748b; padding: 1rem; }
+        .table tbody td { padding: 1rem; border-color: #f1f5f9; vertical-align: middle; font-size: 0.9rem; }
+        .id-pill { background: #eef2ff; color: #4f46e5; padding: 0.2rem 0.5rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; }
+        .status-pill { padding: 0.25rem 0.7rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; }
+        .status-PENDING { background: #fef3c7; color: #92400e; }
+        .status-CONFIRMED { background: #dbeafe; color: #1e40af; }
+        .status-CHECKED_IN { background: #d1fae5; color: #065f46; }
+        .status-COMPLETED { background: #e2e8f0; color: #475569; }
+        .status-CANCELLED { background: #fee2e2; color: #991b1b; }
+        .status-select { border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.3rem 0.5rem; font-size: 0.8rem; }
+        .btn-update { background: #1e293b; color: white; border: none; padding: 0.3rem 0.7rem; border-radius: 6px; font-size: 0.75rem; margin-left: 0.3rem; }
+        .alert-success { background: #d1fae5; color: #065f46; padding: 0.8rem 1rem; border-radius: 10px; margin-bottom: 1rem; }
+        .alert-error { background: #fee2e2; color: #991b1b; padding: 0.8rem 1rem; border-radius: 10px; margin-bottom: 1rem; }
+    </style>
+</head>
+<body>
+
+<div class="topbar">
+    <div class="container">
+        <a th:href="@{/admin/dashboard}">← Back to Dashboard</a>
+        <h1 class="mt-2">All Reservations</h1>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <div class="content-card">
+
+        <div th:if="${successMessage}" class="alert-success" th:text="${successMessage}"></div>
+        <div th:if="${errorMessage}" class="alert-error" th:text="${errorMessage}"></div>
+
+        <div class="text-muted small mb-3" th:text="${reservations.size() + ' total reservations'}">0</div>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Customer</th>
+                <th>Room</th>
+                <th>Dates</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Update</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="r : ${reservations}">
+                <td><span class="id-pill" th:text="${'#' + r.id}">#1</span></td>
+                <td>
+                    <strong th:text="${r.customer.name}">Customer</strong><br>
+                    <small class="text-muted" th:text="${r.customer.email}">email</small>
+                </td>
+                <td>
+                    <strong th:text="${'Room ' + r.room.roomNumber}">Room 101</strong><br>
+                    <small class="text-muted" th:text="${r.room.roomType == 'NonAcRoom' ? 'Non-AC' : (r.room.roomType == 'AcRoom' ? 'AC' : 'Family')}">Type</small>
+                </td>
+                <td>
+                    <span th:text="${r.checkIn}">2026-05-01</span><br>
+                    <small class="text-muted" th:text="${'to ' + r.checkOut + ' (' + r.nights + ' nights)'}">to date</small>
+                </td>
+                <td><strong th:text="${'Rs. ' + r.totalAmount}">Rs. 0</strong></td>
+                <td><span th:classappend="${'status-pill status-' + r.status}" th:text="${r.status}">PENDING</span></td>
+                <td>
+                    <form th:action="@{/admin/reservations/status/{id}(id=${r.id})}" method="post" style="display: flex; gap: 0.3rem; margin: 0;">
+                        <select name="status" class="status-select">
+                            <option value="PENDING"     th:selected="${r.status == 'PENDING'}">Pending</option>
+                            <option value="CONFIRMED"   th:selected="${r.status == 'CONFIRMED'}">Confirmed</option>
+                            <option value="CHECKED_IN"  th:selected="${r.status == 'CHECKED_IN'}">Checked In</option>
+                            <option value="COMPLETED"   th:selected="${r.status == 'COMPLETED'}">Completed</option>
+                            <option value="CANCELLED"   th:selected="${r.status == 'CANCELLED'}">Cancelled</option>
+                        </select>
+                        <button type="submit" class="btn-update">Update</button>
+                    </form>
+                </td>
+            </tr>
+            <tr th:if="${reservations.isEmpty()}">
+                <td colspan="7" class="text-center text-muted p-4">No reservations yet.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

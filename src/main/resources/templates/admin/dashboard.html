@@ -47,6 +47,10 @@
             <div class="stat-number" th:text="${totalStaff}">0</div>
             <div class="stat-label">Staff Members</div>
         </div>
+        <div class="stat-card">
+            <div class="stat-number" th:text="${totalReservations}">0</div>
+            <div class="stat-label">Reservations</div>
+        </div>
     </div>
 
     <div class="menu-grid">
@@ -61,6 +65,10 @@
         <a th:href="@{/admin/customers}" class="menu-card">
             <h3>Customers</h3>
             <p>View and manage registered customers</p>
+        </a>
+        <a th:href="@{/admin/reservations}" class="menu-card">
+            <h3>Reservations</h3>
+            <p>View bookings and update status</p>
         </a>
         <a th:href="@{/admin/staff}" class="menu-card admin-only" th:if="${staff.role == 'ADMIN'}">
             <h3>Staff Members</h3>

@@ -34,7 +34,15 @@ public class ReservationController {
         List<Room> rooms = roomService.getAll().stream()
                 .filter(r -> "AVAILABLE".equalsIgnoreCase(r.getStatus()))
                 .toList();
+
+        // Build a map of roomId → hasUpcomingBookings
+        java.util.Map<Long, Boolean> bookingStatus = new java.util.HashMap<>();
+        for (Room r : rooms) {
+            bookingStatus.put(r.getId(), reservationService.hasUpcomingBookings(r.getId()));
+        }
+
         model.addAttribute("rooms", rooms);
+        model.addAttribute("bookingStatus", bookingStatus);
         return "booking/browse";
     }
 
@@ -88,5 +96,42 @@ public class ReservationController {
         }
         model.addAttribute("reservation", reservation);
         return "booking/confirmation";
+    }
+
+    // Customer's own bookings
+    @GetMapping("/my-bookings")
+    public String myBookings(HttpSession session, Model model) {
+        Customer customer = (Customer) session.getAttribute("loggedInCustomer");
+        if (customer == null) {
+            return "redirect:/login";
+        }
+        List<Reservation> bookings = reservationService.getByCustomer(customer);
+        model.addAttribute("bookings", bookings);
+        model.addAttribute("customer", customer);
+        return "booking/my-bookings";
+    }
+
+    // Customer cancels their own booking
+    @PostMapping("/cancel/{id}")
+    public String cancelBooking(@PathVariable Long id,
+                                HttpSession session,
+                                RedirectAttributes redirectAttrs) {
+        Customer customer = (Customer) session.getAttribute("loggedInCustomer");
+        if (customer == null) {
+            return "redirect:/login";
+        }
+        try {
+            Reservation r = reservationService.getById(id);
+            // Customer can only cancel their own bookings
+            if (!r.getCustomer().getId().equals(customer.getId())) {
+                redirectAttrs.addFlashAttribute("errorMessage", "You can only cancel your own bookings.");
+                return "redirect:/booking/my-bookings";
+            }
+            reservationService.cancel(id);
+            redirectAttrs.addFlashAttribute("successMessage", "Booking cancelled.");
+        } catch (IllegalArgumentException e) {
+            redirectAttrs.addFlashAttribute("errorMessage", e.getMessage());
+        }
+        return "redirect:/booking/my-bookings";
     }
 }

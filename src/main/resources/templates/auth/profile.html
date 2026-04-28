@@ -31,12 +31,16 @@
 </head>
 <body>
 
-<div class="page-header">
-    <div class="container d-flex justify-content-between align-items-center">
-        <div>
-            <h1>My Profile</h1>
-            <p>Welcome back, <span th:text="${customer.name}">Guest</span></p>
-        </div>
+<div class="container d-flex justify-content-between align-items-center">
+    <div>
+        <h1>My Profile</h1>
+        <p>Welcome back, <span th:text="${customer.name}">Guest</span></p>
+    </div>
+    <div>
+        <a th:href="@{/booking/rooms}" style="background: white; color: #667eea; border: none; font-weight: 600; padding: 0.6rem 1.4rem; border-radius: 10px; text-decoration: none; margin-right: 0.5rem; box-shadow: 0 4px 14px rgba(0,0,0,0.15);">Book a Room</a>
+
+        <a th:href="@{/booking/my-bookings}" style="background: rgba(255,255,255,0.95); color: #475569; border: none; font-weight: 600; padding: 0.6rem 1.4rem; border-radius: 10px; text-decoration: none; margin-right: 0.5rem; box-shadow: 0 4px 14px rgba(0,0,0,0.15);">My Bookings</a>
+
         <a th:href="@{/logout}" class="btn-logout">Sign Out</a>
     </div>
 </div>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Browse Rooms</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf3 100%); min-height: 100vh; color: #1a202c; }
+        .page-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 3rem 0 4rem; margin-bottom: -2.5rem; color: white; }
+        .page-header h1 { font-weight: 700; font-size: 2rem; margin: 0; }
+        .page-header p { opacity: 0.85; margin: 0.25rem 0 0; }
+        .room-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+        .room-card { background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08); overflow: hidden; transition: transform 0.2s; }
+        .room-card:hover { transform: translateY(-4px); }
+        .room-banner { height: 100px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 1.4rem; font-weight: 700; }
+        .room-banner.NON_AC { background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%); }
+        .room-banner.AC { background: linear-gradient(135deg, #10b981 0%, #047857 100%); }
+        .room-banner.FAMILY { background: linear-gradient(135deg, #ec4899 0%, #be185d 100%); }
+        .room-body { padding: 1.5rem; }
+        .room-title { font-weight: 600; font-size: 1.1rem; margin-bottom: 0.25rem; }
+        .room-subtitle { color: #64748b; font-size: 0.875rem; margin-bottom: 1rem; }
+        .room-info { font-size: 0.875rem; color: #475569; margin-bottom: 0.4rem; }
+        .price-tag { font-size: 1.25rem; font-weight: 700; color: #1e293b; margin: 1rem 0 1rem; }
+        .price-tag small { font-weight: 400; color: #64748b; font-size: 0.8rem; }
+        .btn-book { display: block; width: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-align: center; padding: 0.7rem; border-radius: 10px; text-decoration: none; font-weight: 500; }
+        .btn-book:hover { color: white; transform: translateY(-1px); }
+        .empty-state { text-align: center; padding: 3rem; color: #94a3b8; background: white; border-radius: 16px; }
+    </style>
+</head>
+<body>
+
+<div class="page-header">
+    <div class="container">
+        <a th:href="@{/profile}" style="color: rgba(255,255,255,0.85); text-decoration: none; font-size: 0.875rem;">← Back to Profile</a>
+        <h1 class="mt-2">Available Rooms</h1>
+        <p>Choose a room to book your stay</p>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <div th:if="${rooms.isEmpty()}" class="empty-state">
+        No rooms available right now. Please check back later.
+    </div>
+
+    <div class="room-grid" th:if="${!rooms.isEmpty()}">
+        <div class="room-card" th:each="r : ${rooms}">
+            <div th:classappend="${'room-banner ' + (r.roomType == 'NonAcRoom' ? 'NON_AC' : (r.roomType == 'AcRoom' ? 'AC' : 'FAMILY'))}"
+                 th:text="${'Room ' + r.roomNumber}">Room 101</div>
+            <div class="room-body">
+                <div class="room-title" th:text="${r.category != null ? r.category.name : 'Room'}">Standard Room</div>
+                <div class="room-subtitle" th:text="${r.roomType == 'NonAcRoom' ? 'Non-AC' : (r.roomType == 'AcRoom' ? 'Air Conditioned' : 'Family Room')}">Type</div>
+
+                <div class="room-info">📍 Floor <span th:text="${r.floor}">1</span></div>
+                <div class="room-info" th:if="${r.category != null and r.category.amenities != null}"
+                     th:text="'✨ ' + ${r.category.amenities}">Amenities</div>
+
+                //room availability
+                <div class="room-info" th:if="${bookingStatus[r.id]}"
+                     style="color: #92400e; background: #fef3c7; padding: 0.4rem 0.7rem; border-radius: 6px; margin: 0.5rem 0; font-size: 0.8rem;">
+                    ⚠ Has upcoming bookings — check date availability
+                </div>
+
+                <div class="price-tag">
+                    Rs. <span th:text="${r.category != null ? r.category.basePrice : 0}">0</span>
+                    <small>/ night base</small>
+                </div>
+
+                <a th:href="@{/booking/book/{id}(id=${r.id})}" class="btn-book">Book This Room</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -5,6 +5,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import com.hotel.reservation.reservation.ReservationService;
+import com.hotel.reservation.reservation.Reservation;
 
 import java.util.Optional;
 
@@ -14,10 +16,12 @@ public class AdminController {
 
     private final StaffService staffService;
     private final CustomerService customerService;
+    private final ReservationService reservationService;
 
-    public AdminController(StaffService staffService, CustomerService customerService) {
+    public AdminController(StaffService staffService, CustomerService customerService,ReservationService reservationService) {
         this.staffService = staffService;
         this.customerService = customerService;
+        this.reservationService = reservationService;
     }
 
     // ===== ADMIN LOGIN =====
@@ -58,6 +62,7 @@ public class AdminController {
         model.addAttribute("staff", staff);
         model.addAttribute("totalCustomers", customerService.getAll().size());
         model.addAttribute("totalStaff", staffService.getAllStaff().size());
+        model.addAttribute("totalReservations", reservationService.getAll().size());  // NEW
         return "admin/dashboard";
     }
 
@@ -113,6 +118,28 @@ public class AdminController {
         if (!isAdmin(session)) return "redirect:/admin/login";
         customerService.delete(id);
         return "redirect:/admin/customers";
+    }
+
+    @GetMapping("/reservations")
+    public String reservationList(HttpSession session, Model model) {
+        if (session.getAttribute("loggedInStaff") == null) return "redirect:/admin/login";
+        model.addAttribute("reservations", reservationService.getAll());
+        return "admin/reservation-list";
+    }
+
+    @PostMapping("/reservations/status/{id}")
+    public String updateReservationStatus(@PathVariable Long id,
+                                          @RequestParam String status,
+                                          HttpSession session,
+                                          RedirectAttributes redirectAttrs) {
+        if (session.getAttribute("loggedInStaff") == null) return "redirect:/admin/login";
+        try {
+            reservationService.updateStatus(id, status);
+            redirectAttrs.addFlashAttribute("successMessage", "Reservation status updated to " + status);
+        } catch (Exception e) {
+            redirectAttrs.addFlashAttribute("errorMessage", e.getMessage());
+        }
+        return "redirect:/admin/reservations";
     }
 
     // ===== HELPER =====

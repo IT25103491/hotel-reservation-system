@@ -84,4 +84,11 @@ public class ReservationService {
     public void delete(Long id) {
         repository.deleteById(id);
     }
+
+    public boolean hasUpcomingBookings(Long roomId) {
+        LocalDate today = LocalDate.now();
+        LocalDate farFuture = today.plusYears(1);
+        List<Reservation> bookings = repository.findConflictingReservations(roomId, today, farFuture);
+        return !bookings.isEmpty();
+    }
 }
