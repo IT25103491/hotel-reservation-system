@@ -1,0 +1,425 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Raleway:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap');
+
+:root {
+    --bg: #0e0e1c;
+    --bg2: #16162a;
+    --bg3: #1e1e3a;
+    --glass: rgba(255,255,255,0.04);
+    --glass2: rgba(255,255,255,0.07);
+    --border: rgba(255,255,255,0.10);
+    --border-gold: rgba(201,155,58,0.30);
+    --gold: #c99b3a;
+    --gold2: #e8c878;
+    --gold-g: linear-gradient(135deg,#b8842a 0%,#e8c878 50%,#f0d488 100%);
+    --cream: #f0e8d8;
+    --cream2: #cfc4a8;
+    --slate: #8a9ab8;
+    --green: #3ecf82;
+    --red: #e05a6a;
+    --blue: #4a9ef8;
+    --purple: #a78bfa;
+}
+
+/* ── Base ── */
+html, body {
+    background: var(--bg) !important;
+    color: var(--cream) !important;
+    font-family: 'Raleway', sans-serif !important;
+    min-height: 100vh;
+}
+
+body::before {
+    content: '';
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 0;
+    background:
+            radial-gradient(800px circle at 80% -10%, rgba(201,155,58,0.15) 0%, transparent 55%),
+            radial-gradient(700px circle at -10% 110%, rgba(167,139,250,0.10) 0%, transparent 55%),
+            radial-gradient(500px circle at 50% 50%, rgba(74,158,248,0.05) 0%, transparent 70%);
+}
+
+/* Force ALL container-level backgrounds to dark */
+.container, .container-fluid, main, section, div { background-color: transparent; }
+
+/* ── Typography ── */
+h1, h2, h3, .page-header h1, .form-header h2, .auth-header h2, .booking-header h2, .checkout-header h2 {
+    font-family: 'Playfair Display', serif !important;
+    font-weight: 700 !important;
+    color: var(--cream) !important;
+    background: var(--gold-g) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+}
+
+p, span, label, td, li, small {
+    color: var(--cream);
+}
+.text-muted, small.text-muted, .text-secondary { color: var(--slate) !important; }
+a { color: var(--gold2); text-decoration: none; }
+a:hover { color: var(--cream); }
+
+/* ── Page Header (gradient strip at top) ── */
+.page-header, .topbar {
+    background: linear-gradient(180deg, rgba(15,21,37,0.95) 0%, rgba(10,14,26,0.98) 100%) !important;
+    border-bottom: 1px solid var(--border-gold) !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5) !important;
+    color: var(--cream) !important;
+    padding: 2rem 0 2.5rem !important;
+    margin-bottom: 0 !important;
+    position: relative;
+}
+.page-header::after, .topbar::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 10%; right: 10%; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.page-header p, .topbar p { color: var(--cream2) !important; opacity: 1 !important; }
+
+/* ── ALL CARDS — force dark glass background ── */
+.content-card, .form-card, .auth-card, .booking-card, .checkout-card,
+.confirm-card, .receipt-card, .stat-card, .menu-card, .room-card,
+[class*="card"] {
+    background: rgba(255,255,255,0.04) !important;
+    backdrop-filter: blur(20px) saturate(1.4);
+    -webkit-backdrop-filter: blur(20px) saturate(1.4);
+    border: 1px solid var(--border) !important;
+    border-radius: 14px !important;
+    color: var(--cream) !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
+}
+
+/* Card colored header strips */
+.form-header, .auth-header, .booking-header, .checkout-header {
+    background: linear-gradient(135deg, rgba(201,155,58,0.12) 0%, rgba(15,21,37,0.6) 100%) !important;
+    border-bottom: 1px solid var(--border-gold) !important;
+    color: var(--cream) !important;
+}
+.confirm-header, .receipt-header {
+    background: linear-gradient(135deg, rgba(62,207,130,0.18) 0%, rgba(15,21,37,0.6) 100%) !important;
+    border-bottom: 1px solid rgba(62,207,130,0.3) !important;
+}
+
+/* ── Stats display ── */
+.stat-card { padding: 1.5rem !important; }
+.stat-number {
+    background: var(--gold-g) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    font-family: 'Playfair Display', serif !important;
+    font-size: 2.5rem !important;
+    font-weight: 700 !important;
+}
+.stat-label {
+    color: var(--slate) !important;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.7rem !important;
+    font-weight: 600 !important;
+}
+
+/* ── Menu cards (dashboard tiles) ── */
+.menu-card {
+    padding: 1.5rem !important;
+    border-left: 3px solid var(--gold) !important;
+    text-decoration: none !important;
+    transition: all 0.2s !important;
+    display: block !important;
+}
+.menu-card:hover {
+    transform: translateY(-2px);
+    background: rgba(15,21,37,0.85) !important;
+    border-left-color: var(--gold2) !important;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.6), 0 0 30px rgba(201,155,58,0.15) !important;
+}
+.menu-card.admin-only { border-left-color: var(--red) !important; }
+.menu-card h3 {
+    background: var(--gold-g) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    font-family: 'Playfair Display', serif !important;
+    font-size: 1.1rem !important;
+    margin-bottom: 0.4rem !important;
+}
+.menu-card.admin-only h3 {
+    background: linear-gradient(135deg, #f87171 0%, #ef4444 100%) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+}
+.menu-card p {
+    color: var(--cream2) !important;
+    margin: 0 !important;
+    font-size: 0.875rem !important;
+}
+
+/* ── Tables ── */
+.table {
+    color: var(--cream) !important;
+    background: transparent !important;
+}
+.table thead th {
+    background: rgba(201,155,58,0.08) !important;
+    color: var(--gold2) !important;
+    border: none !important;
+    border-bottom: 1px solid var(--border-gold) !important;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.7rem !important;
+    font-weight: 700 !important;
+    padding: 0.9rem 1rem !important;
+}
+.table tbody td {
+    background: transparent !important;
+    color: var(--cream) !important;
+    border-color: var(--border) !important;
+    padding: 0.9rem 1rem !important;
+    vertical-align: middle;
+}
+.table tbody tr:hover td { background: var(--glass) !important; }
+.table-striped tbody tr:nth-of-type(odd) td { background: rgba(255,255,255,0.02) !important; }
+
+/* ── Forms ── */
+.form-label {
+    color: var(--gold2) !important;
+    font-size: 0.7rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.1em !important;
+    font-weight: 600 !important;
+}
+.form-control, .form-select, input, textarea, select {
+    background: rgba(255,255,255,0.04) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 10px !important;
+    color: var(--cream) !important;
+    padding: 0.7rem 1rem !important;
+}
+.form-control:focus, .form-select:focus, input:focus, textarea:focus, select:focus {
+    border-color: var(--gold) !important;
+    box-shadow: 0 0 0 3px rgba(201,155,58,0.20) !important;
+    background: rgba(255,255,255,0.06) !important;
+    outline: none !important;
+}
+.form-control[readonly] {
+    background: rgba(255,255,255,0.02) !important;
+    color: var(--slate) !important;
+}
+.form-control::placeholder, input::placeholder, textarea::placeholder { color: var(--slate) !important; }
+select option,
+select.form-select option,
+select.status-select option {
+    background-color: #131c33 !important;
+    color: #f0e8d8 !important;
+    padding: 8px !important;
+}
+
+.status-select {
+    background: rgba(255,255,255,0.04) !important;
+    border: 1px solid var(--border) !important;
+    color: var(--cream) !important;
+    padding: 0.4rem 0.6rem !important;
+    border-radius: 6px !important;
+}
+.status-select:focus {
+    border-color: var(--gold) !important;
+    outline: none !important;
+}
+
+/* ── Buttons ── */
+.btn-primary, .btn-add, .btn-save, .btn-submit, .btn-confirm, .btn-pay, .btn-update, .btn-book {
+    background: var(--gold-g) !important;
+    border: none !important;
+    color: #1a1306 !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.03em !important;
+    border-radius: 10px !important;
+    padding: 0.7rem 1.4rem !important;
+    box-shadow: 0 4px 15px rgba(201,155,58,0.3) !important;
+    transition: all 0.2s !important;
+    text-decoration: none !important;
+    display: inline-block;
+}
+.btn-primary:hover, .btn-add:hover, .btn-save:hover, .btn-submit:hover,
+.btn-confirm:hover, .btn-pay:hover, .btn-book:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(201,155,58,0.5) !important;
+    color: #1a1306 !important;
+}
+
+.btn-cancel, .btn-secondary {
+    background: var(--glass2) !important;
+    color: var(--cream) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 10px !important;
+}
+.btn-cancel:hover, .btn-secondary:hover { background: rgba(255,255,255,0.10) !important; color: var(--cream) !important; }
+
+.btn-logout {
+    background: rgba(224,90,106,0.12) !important;
+    color: var(--red) !important;
+    border: 1px solid rgba(224,90,106,0.3) !important;
+    border-radius: 10px !important;
+}
+
+.btn-edit, .btn-action.btn-edit {
+    background: rgba(74,158,248,0.12) !important;
+    color: var(--blue) !important;
+    border: 1px solid rgba(74,158,248,0.3) !important;
+}
+.btn-del, .btn-action.btn-del, .btn-cancel-booking {
+    background: rgba(224,90,106,0.12) !important;
+    color: var(--red) !important;
+    border: 1px solid rgba(224,90,106,0.3) !important;
+}
+
+/* ── Pills, badges, status ── */
+.id-pill {
+    background: rgba(201,155,58,0.10) !important;
+    color: var(--gold2) !important;
+    border: 1px solid var(--border-gold) !important;
+    font-family: 'JetBrains Mono', monospace !important;
+}
+.price-badge, .points-badge {
+    background: rgba(62,207,130,0.12) !important;
+    color: var(--green) !important;
+    border: 1px solid rgba(62,207,130,0.25) !important;
+}
+.points-display {
+    background: linear-gradient(135deg, rgba(201,155,58,0.15) 0%, rgba(201,155,58,0.04) 100%) !important;
+    border: 1px solid var(--border-gold) !important;
+}
+.points-number {
+    background: var(--gold-g) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    font-family: 'Playfair Display', serif !important;
+}
+.points-label { color: var(--gold2) !important; }
+
+.status-AVAILABLE, .status-CONFIRMED, .status-COMPLETED { background: rgba(62,207,130,0.12) !important; color: var(--green) !important; border: 1px solid rgba(62,207,130,0.3) !important; }
+.status-OCCUPIED, .status-CANCELLED, .status-FAILED { background: rgba(224,90,106,0.12) !important; color: var(--red) !important; border: 1px solid rgba(224,90,106,0.3) !important; }
+.status-MAINTENANCE, .status-PENDING { background: rgba(232,200,120,0.10) !important; color: var(--gold2) !important; border: 1px solid var(--border-gold) !important; }
+.status-CHECKED_IN { background: rgba(74,158,248,0.12) !important; color: var(--blue) !important; border: 1px solid rgba(74,158,248,0.3) !important; }
+
+.role-pill.role-STAFF, .role-STAFF { background: rgba(74,158,248,0.12) !important; color: var(--blue) !important; }
+.role-pill.role-ADMIN, .role-ADMIN { background: rgba(201,155,58,0.15) !important; color: var(--gold2) !important; border: 1px solid var(--border-gold) !important; }
+
+.type-NONAC { background: rgba(74,158,248,0.12) !important; color: var(--blue) !important; }
+.type-AC { background: rgba(62,207,130,0.12) !important; color: var(--green) !important; }
+.type-FAMILY { background: rgba(167,139,250,0.12) !important; color: var(--purple) !important; }
+
+.method-Cash, .method-badge.method-Cash { background: rgba(62,207,130,0.12) !important; color: var(--green) !important; }
+.method-Card, .method-badge.method-Card { background: rgba(74,158,248,0.12) !important; color: var(--blue) !important; }
+
+/* ── Booking-specific bits ── */
+.summary-box, .room-summary, .booking-grid, .txn-box {
+    background: rgba(255,255,255,0.03) !important;
+    border: 1px solid var(--border) !important;
+    color: var(--cream) !important;
+}
+.info-row { border-bottom: 1px solid var(--border) !important; }
+.info-label, .summary-row .label, .grid-item .label { color: var(--slate) !important; }
+.info-value, .summary-row .value, .grid-item .value { color: var(--cream) !important; }
+
+.total-row {
+    background: linear-gradient(135deg, rgba(201,155,58,0.15) 0%, rgba(201,155,58,0.04) 100%) !important;
+    border: 1px solid var(--border-gold) !important;
+}
+.total-amount, .total-label {
+    background: var(--gold-g) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    font-family: 'Playfair Display', serif !important;
+    font-weight: 700 !important;
+}
+
+.price-preview {
+    background: linear-gradient(135deg, rgba(62,207,130,0.12) 0%, rgba(62,207,130,0.02) 100%) !important;
+    border: 1px solid rgba(62,207,130,0.25) !important;
+}
+.price-preview .amount { color: var(--green) !important; font-family: 'Playfair Display', serif !important; }
+.price-preview .label { color: var(--green) !important; }
+
+/* Room cards on browse page */
+.room-banner {
+    background: linear-gradient(135deg, rgba(201,155,58,0.25) 0%, rgba(15,21,37,0.7) 100%) !important;
+    color: var(--cream) !important;
+    font-family: 'Playfair Display', serif !important;
+    border-bottom: 1px solid var(--border-gold);
+}
+.room-banner.NON_AC { background: linear-gradient(135deg, rgba(74,158,248,0.25) 0%, rgba(15,21,37,0.7) 100%) !important; }
+.room-banner.AC { background: linear-gradient(135deg, rgba(62,207,130,0.25) 0%, rgba(15,21,37,0.7) 100%) !important; }
+.room-banner.FAMILY { background: linear-gradient(135deg, rgba(167,139,250,0.25) 0%, rgba(15,21,37,0.7) 100%) !important; }
+.room-title { color: var(--cream) !important; font-family: 'Playfair Display', serif !important; }
+.room-subtitle, .room-info { color: var(--slate) !important; }
+.price-tag { color: var(--gold2) !important; font-family: 'Playfair Display', serif !important; }
+.price-tag small { color: var(--slate) !important; }
+
+/* Auth footer */
+.auth-footer {
+    background: rgba(255,255,255,0.02) !important;
+    color: var(--slate) !important;
+    border-top: 1px solid var(--border) !important;
+}
+.auth-footer a { color: var(--gold2) !important; }
+
+/* Booking accent bars */
+.booking-card.PENDING .accent-bar { background: var(--gold) !important; }
+.booking-card.CONFIRMED .accent-bar { background: var(--blue) !important; }
+.booking-card.CHECKED_IN .accent-bar { background: var(--green) !important; }
+.booking-card.COMPLETED .accent-bar { background: var(--slate) !important; }
+.booking-card.CANCELLED .accent-bar { background: var(--red) !important; }
+
+/* Alerts */
+.alert-success {
+    background: rgba(62,207,130,0.10) !important;
+    color: var(--green) !important;
+    border: 1px solid rgba(62,207,130,0.25) !important;
+    border-left: 4px solid var(--green) !important;
+}
+.alert-error {
+    background: rgba(224,90,106,0.10) !important;
+    color: var(--red) !important;
+    border: 1px solid rgba(224,90,106,0.25) !important;
+    border-left: 4px solid var(--red) !important;
+}
+.error-text { color: var(--red) !important; }
+
+/* Method tabs */
+.method-btn {
+    background: var(--glass) !important;
+    border: 1px solid var(--border) !important;
+    color: var(--slate) !important;
+}
+.method-btn.active {
+    background: rgba(201,155,58,0.10) !important;
+    border-color: var(--gold) !important;
+    color: var(--gold2) !important;
+}
+
+/* Transaction monospace */
+.txn-id, .booking-id { font-family: 'JetBrains Mono', monospace !important; color: var(--gold2) !important; }
+
+/* Empty states */
+.empty-state { color: var(--slate) !important; }
+
+/* Tighten up wasteful spacing */
+.pb-5 { padding-bottom: 2rem !important; }
+.mt-4, .mt-5 { margin-top: 1.5rem !important; }
+.profile-grid, .stats-grid, .menu-grid, .room-grid { margin-top: 1.5rem !important; gap: 1rem !important; }
+
+/* Print receipts: light theme */
+@media print {
+    body { background: white !important; }
+    body::before, body::after { display: none; }
+    .receipt-card, .container { background: white !important; color: black !important; }
+    * { color: black !important; }
+    h1, h2, h3, .stat-number, .points-number, .total-amount {
+        background: none !important;
+        -webkit-text-fill-color: black !important;
+        color: black !important;
+    }
+}

@@ -56,6 +56,7 @@ public class ReservationController {
         model.addAttribute("room", room);
         model.addAttribute("today", LocalDate.now().toString());
         model.addAttribute("tomorrow", LocalDate.now().plusDays(1).toString());
+        model.addAttribute("existingBookings", reservationService.getActiveBookingsForRoom(roomId));
         return "booking/form";
     }
 

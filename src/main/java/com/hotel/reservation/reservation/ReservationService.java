@@ -91,4 +91,11 @@ public class ReservationService {
         List<Reservation> bookings = repository.findConflictingReservations(roomId, today, farFuture);
         return !bookings.isEmpty();
     }
+
+    public List<Reservation> getActiveBookingsForRoom(Long roomId) {
+        LocalDate today = LocalDate.now();
+        LocalDate farFuture = today.plusYears(1);
+        return repository.findConflictingReservations(roomId, today, farFuture);
+    }
+    
 }
